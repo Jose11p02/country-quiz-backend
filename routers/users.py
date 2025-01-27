@@ -1,15 +1,14 @@
-from fastapi import APIRouter,Depends
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from schemas.users import users
 from config.database import session_local
 from sqlalchemy.exc import SQLAlchemyError
 from services.users import UsersServices
-from dependencies.dependencies import validate_api_key
 
 users_router = APIRouter()
 
-@users_router.post('/users',tags=['users'],dependencies=[Depends(validate_api_key)])
+@users_router.post('/users',tags=['users'])
 
 def add(users:users):
     db = session_local()
@@ -22,7 +21,7 @@ def add(users:users):
         db.close()
         
 
-@users_router.get('/users',tags=['users'],response_model=users,dependencies=[Depends(validate_api_key)])
+@users_router.get('/users',tags=['users'],response_model=users)
 
 def get_top():
     db = session_local()
@@ -35,7 +34,7 @@ def get_top():
     finally:
         db.close()
 
-@users_router.get('/users/statistics',tags=['users'],response_model=users,dependencies=[Depends(validate_api_key)])
+@users_router.get('/users/statistics',tags=['users'],response_model=users)
 
 def get_statistics():
     db = session_local()
