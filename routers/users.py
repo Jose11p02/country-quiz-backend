@@ -10,10 +10,12 @@ users_router = APIRouter()
 
 @users_router.post('/users',tags=['users'])
 
-def add(users:users):
+def add_users(users:users):
     db = session_local()
     try:
         UsersServices(db).add(users)
+        return JSONResponse(content={"message": "User added successfully"}, status_code=201)
+
     except SQLAlchemyError as e:
         return JSONResponse(content={'error':str(e)},status_code=500)
     
@@ -23,7 +25,7 @@ def add(users:users):
 
 @users_router.get('/users',tags=['users'],response_model=users)
 
-def get_top():
+def get_top_users():
     db = session_local()
     try:
         top = UsersServices(db).get_top()
@@ -36,7 +38,7 @@ def get_top():
 
 @users_router.get('/users/statistics',tags=['users'],response_model=users)
 
-def get_statistics():
+def get_users_statistics():
     db = session_local()
     try:
         result = UsersServices(db).get_users_by_country()
